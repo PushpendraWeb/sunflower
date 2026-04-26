@@ -1,0 +1,212 @@
+.doctor-photo {
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+/* About section: caption under doctor photo */
+.about-photo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-photo-wrap {
+  max-width: 420px;
+  width: 100%;
+}
+
+.about-photo-caption {
+  text-align: center;
+  margin-top: 1.35rem;
+  padding: 0 0.75rem 0.25rem;
+}
+
+.about-photo-name {
+  font-size: 1.28rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+  color: var(--heading-color, #2c4964);
+}
+
+.about-photo-role {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--brand-green, #1b3e07);
+  margin-bottom: 0.65rem;
+  line-height: 1.4;
+}
+
+.about-photo-tagline {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--default-color, #444), transparent 12%);
+  margin-bottom: 0;
+}
+
+/* Doctors section circular thumbnail */
+.doctors .team-member .pic {
+  aspect-ratio: 1 / 1;
+}
+
+.doctors-pic-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.hero-logo {
+  width: min(460px, 92vw);
+  height: auto;
+}
+
+.hero-welcome {
+  margin-top: -70px;
+}
+
+@media (max-width: 576px) {
+  .hero-welcome {
+    margin-top: -35px;
+  }
+}
+
+.blog-thumb {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--brand-green), transparent 25%);
+}
+
+.blog-box {
+  padding: 16px 16px 0 16px;
+}
+
+.blog-box p:last-child {
+  margin-bottom: 0;
+}
+
+.blog-readmore {
+  display: inline-block;
+  padding: 10px 0 12px 0;
+  font-weight: 600;
+  color: var(--brand-green);
+}
+
+.blog-readmore:hover {
+  color: color-mix(in srgb, var(--brand-green), black 20%);
+}
+
+/* Reviews carousel (Swiper) */
+.btn-add-review {
+  background-color: var(--brand-green, #1b3e07);
+  border-color: var(--brand-green, #1b3e07);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-add-review:hover {
+  background-color: color-mix(in srgb, var(--brand-green, #1b3e07), black 15%);
+  border-color: color-mix(in srgb, var(--brand-green, #1b3e07), black 15%);
+  color: #fff;
+}
+
+.reviews-swiper {
+  position: relative;
+  padding-left: 2.75rem;
+  padding-right: 2.75rem;
+}
+
+.testimonials .reviews-swiper .testimonial-item .stars .bi-star-fill {
+  color: #ffc107;
+}
+
+.testimonials .reviews-swiper .testimonial-item .stars .bi-star {
+  color: color-mix(in srgb, var(--default-color, #555), transparent 55%);
+}
+
+.testimonials-swiper-prev,
+.testimonials-swiper-next {
+  color: var(--brand-green, #1b3e07) !important;
+}
+
+.testimonials-swiper-prev::after,
+.testimonials-swiper-next::after {
+  font-size: 1.35rem !important;
+}
+
+.review-mobile-line {
+  margin-top: 2px;
+}
+
+/* Add review modal */
+.review-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1060;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.review-modal-panel {
+  width: 100%;
+  max-width: 440px;
+  margin-top: 4vh;
+  border: none;
+}
+
+.review-modal-close {
+  flex-shrink: 0;
+}
+
+.review-star-picker .review-star-btn {
+  color: #ffc107;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.review-star-picker .review-star-btn .bi-star {
+  color: color-mix(in srgb, #ffc107, transparent 55%);
+}
+
+.review-star-picker .review-star-btn:focus-visible {
+  outline: 2px solid var(--brand-green, #1b3e07);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Contact map — full width strip, shorter height */
+.contact-map-outer {
+  width: 100%;
+}
+
+.contact-map-wrap {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #e9ecef;
+}
+
+@media (min-width: 768px) {
+  .contact-map-wrap {
+    height: 220px;
+  }
+}
+
+.contact-map-iframe {
+  border: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
