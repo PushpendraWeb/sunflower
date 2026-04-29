@@ -18,6 +18,11 @@
         </label>
 
         <label class="field">
+          <span>Location</span>
+          <input type="text" name="location" [(ngModel)]="formModel.location" required />
+        </label>
+
+        <label class="field">
           <span>Day</span>
           <select name="day" [(ngModel)]="formModel.day" required>
             <option value="" disabled>Select day</option>
@@ -66,6 +71,7 @@
             <tr>
               <th>Doctor</th>
               <th>City</th>
+              <th>Location</th>
               <th>Day</th>
               <th>Morning</th>
               <th>Evening</th>
@@ -77,6 +83,7 @@
             <tr *ngFor="let row of filteredTimings">
               <td>{{ row.docterName }}</td>
               <td>{{ row.cityName }}</td>
+              <td>{{ row.location || '-' }}</td>
               <td>{{ row.day }}</td>
               <td>{{ row.morningTime }}</td>
               <td>{{ row.evningTime }}</td>

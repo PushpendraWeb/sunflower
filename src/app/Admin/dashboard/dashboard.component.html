@@ -28,6 +28,7 @@
               <tr>
                 <th>Doctor</th>
                 <th>City</th>
+                <th>Location</th>
                 <th>Day</th>
                 <th>Morning</th>
                 <th>Evening</th>
@@ -37,6 +38,7 @@
               <tr *ngFor="let t of filteredTimings">
                 <td>{{ t.docterName || '-' }}</td>
                 <td>{{ t.cityName || '-' }}</td>
+                <td>{{ t.location || '-' }}</td>
                 <td>{{ t.day || '-' }}</td>
                 <td>{{ t.morningTime || '-' }}</td>
                 <td>{{ t.evningTime || '-' }}</td>

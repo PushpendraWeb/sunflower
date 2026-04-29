@@ -112,17 +112,22 @@
 }
 
 .doctor-timings-table {
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 .doctor-timings-head,
 .doctor-timings-list li {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(0, 0.8fr);
+  grid-template-columns: minmax(120px, 0.9fr) minmax(160px, 1.2fr) minmax(160px, 1.2fr) minmax(120px, 0.8fr) minmax(160px, 1fr);
   gap: 8px;
   padding: 9px 12px;
   font-size: 0.44rem;
   min-width: 0;
+}
+
+.doctor-timings-head,
+.doctor-timings-list li {
+  min-width: 720px;
 }
 
 .doctor-timings-head {

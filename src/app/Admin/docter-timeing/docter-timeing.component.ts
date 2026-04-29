@@ -11,6 +11,7 @@ type DocterTimingRow = {
   id?: number;
   docterName: string;
   cityName: string;
+  location?: string;
   day: string;
   morningTime: string;
   evningTime: string;
@@ -41,6 +42,7 @@ export class DocterTimeingComponent implements OnInit {
   formModel: DocterTimingRow = {
     docterName: 'Dr. Jayesh Prabhakar Waghulde',
     cityName: '',
+    location: '',
     day: 'Monday',
     morningTime: this.defaultMorningTime,
     evningTime: this.defaultEveningTime,
@@ -74,14 +76,20 @@ export class DocterTimeingComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.formModel.docterName.trim() || !this.formModel.cityName.trim() || !this.formModel.day.trim()) {
-      this.toast.showError('Validation', 'Doctor name, city and day are required.');
+    if (
+      !this.formModel.docterName.trim() ||
+      !this.formModel.cityName.trim() ||
+      !this.formModel.day.trim() ||
+      !String(this.formModel.location ?? '').trim()
+    ) {
+      this.toast.showError('Validation', 'Doctor name, city, location and day are required.');
       return;
     }
 
     const payload = {
       docterName: this.formModel.docterName.trim(),
       cityName: this.formModel.cityName.trim(),
+      location: String(this.formModel.location ?? '').trim(),
       day: this.formModel.day.trim(),
       morningTime: this.formModel.morningTime.trim() || this.defaultMorningTime,
       evningTime: this.formModel.evningTime.trim() || this.defaultEveningTime,
@@ -127,6 +135,7 @@ export class DocterTimeingComponent implements OnInit {
         this.formModel = {
           docterName: data.docterName ?? '',
           cityName: data.cityName ?? '',
+          location: (data as any)?.location ?? '',
           day: data.day ?? '',
           morningTime: data.morningTime ?? '',
           evningTime: data.evningTime ?? '',
@@ -156,6 +165,7 @@ export class DocterTimeingComponent implements OnInit {
     this.formModel = {
       docterName: 'Dr. Jayesh Prabhakar Waghulde',
       cityName: '',
+      location: '',
       day: 'Monday',
       morningTime: this.defaultMorningTime,
       evningTime: this.defaultEveningTime,
@@ -174,6 +184,7 @@ export class DocterTimeingComponent implements OnInit {
       (row) =>
         String(row.docterName ?? '').toLowerCase().includes(q) ||
         String(row.cityName ?? '').toLowerCase().includes(q) ||
+        String(row.location ?? '').toLowerCase().includes(q) ||
         String(row.day ?? '').toLowerCase().includes(q) ||
         String(row.morningTime ?? '').toLowerCase().includes(q) ||
         String(row.evningTime ?? '').toLowerCase().includes(q) ||

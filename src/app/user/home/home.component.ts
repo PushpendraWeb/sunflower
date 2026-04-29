@@ -88,6 +88,7 @@ type DoctorTiming = {
   morningTime: string;
   evningTime: string;
   cityName: string;
+  location?: string;
 };
 
 type ActiveReviewApi = {
@@ -110,13 +111,55 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly blogUrl = '/blog';
   readonly starIndexes = [1, 2, 3, 4, 5] as const;
   doctorTimings: DoctorTiming[] = [
-    { day: 'Monday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
-    { day: 'Tuesday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
-    { day: 'Wednesday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
-    { day: 'Thursday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
-    { day: 'Friday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
-    { day: 'Saturday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
-    { day: 'Sunday', morningTime: 'Emergency Only', evningTime: 'Emergency Only', cityName: 'Nashik' },
+    {
+      day: 'Monday',
+      morningTime: '10:00 AM - 1:00 PM',
+      evningTime: '6:00 PM - 8:00 PM',
+      cityName: 'Nashik',
+      location: '',
+    },
+    {
+      day: 'Tuesday',
+      morningTime: '10:00 AM - 1:00 PM',
+      evningTime: '6:00 PM - 8:00 PM',
+      cityName: 'Nashik',
+      location: '',
+    },
+    {
+      day: 'Wednesday',
+      morningTime: '10:00 AM - 1:00 PM',
+      evningTime: '6:00 PM - 8:00 PM',
+      cityName: 'Nashik',
+      location: '',
+    },
+    {
+      day: 'Thursday',
+      morningTime: '10:00 AM - 1:00 PM',
+      evningTime: '6:00 PM - 8:00 PM',
+      cityName: 'Nashik',
+      location: '',
+    },
+    {
+      day: 'Friday',
+      morningTime: '10:00 AM - 1:00 PM',
+      evningTime: '6:00 PM - 8:00 PM',
+      cityName: 'Nashik',
+      location: '',
+    },
+    {
+      day: 'Saturday',
+      morningTime: '10:00 AM - 1:00 PM',
+      evningTime: '6:00 PM - 8:00 PM',
+      cityName: 'Nashik',
+      location: '',
+    },
+    {
+      day: 'Sunday',
+      morningTime: 'Emergency Only',
+      evningTime: 'Emergency Only',
+      cityName: 'Nashik',
+      location: '',
+    },
   ];
 
   @ViewChild('reviewsSwiper', { static: false }) reviewsSwiperRef?: ElementRef<HTMLElement>;
@@ -165,6 +208,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             morningTime: item?.morningTime ?? '-',
             evningTime: item?.evningTime ?? '-',
             cityName: item?.cityName ?? 'Nashik',
+            location: item?.location ?? '',
           }));
         }
       },

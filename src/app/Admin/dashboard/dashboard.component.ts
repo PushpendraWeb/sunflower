@@ -8,6 +8,7 @@ import { APIConstants } from '../../service/apiconstants';
 type TimingRow = {
   docterName?: string;
   cityName?: string;
+  location?: string;
   day?: string;
   morningTime?: string;
   evningTime?: string;
@@ -109,6 +110,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       (t) =>
         String(t.docterName ?? '').toLowerCase().includes(q) ||
         String(t.cityName ?? '').toLowerCase().includes(q) ||
+        String(t.location ?? '').toLowerCase().includes(q) ||
         String(t.day ?? '').toLowerCase().includes(q) ||
         String(t.morningTime ?? '').toLowerCase().includes(q) ||
         String(t.evningTime ?? '').toLowerCase().includes(q)
