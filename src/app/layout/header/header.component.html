@@ -25,35 +25,33 @@
       </a>
 
       <nav id="navmenu" class="navmenu">
-        <ul>
+        <ul *ngIf="!(isOnAdminRoute && isAdminLoggedIn); else adminMenu">
           <li><a href="#hero" class="active" (click)="scrollToSection('hero', $event)">Home<br></a></li>
           <li><a href="#about" (click)="scrollToSection('about', $event)">About</a></li>
           <li><a href="#services" (click)="scrollToSection('services', $event)">Blog</a></li>
-          <!-- <li><a href="#departments">Departments</a></li> -->
           <li><a href="#doctors" (click)="scrollToSection('doctors', $event)">Doctors</a></li>
-          <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li> -->
           <li><a href="#contact" (click)="scrollToSection('contact', $event)">Contact</a></li>
         </ul>
+
+        <ng-template #adminMenu>
+          <ul>
+            <li><a href="#doctor-timing" (click)="scrollToAdminSection('doctor-timing', $event)">Doctor Timing</a></li>
+            <li><a href="#reviews" (click)="scrollToAdminSection('reviews', $event)">Reviews</a></li>
+            <li><a href="#enquiry" (click)="scrollToAdminSection('enquiry', $event)">Enquiry</a></li>
+            <li><a href="/admin/login" (click)="logout($event)">Logout</a></li>
+          </ul>
+        </ng-template>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="cta-btn d-none d-sm-block" href="#contact" (click)="scrollToSection('contact', $event)">Make an Appointment</a>
+      <a
+        class="cta-btn d-none d-sm-block"
+        [routerLink]="isOnAdminRoute ? '/admin/dashboard' : '/'"
+        [attr.href]="isOnAdminRoute ? '/admin/dashboard' : '#contact'"
+        (click)="isOnAdminRoute ? $event.preventDefault() : scrollToSection('contact', $event)"
+      >
+        {{ isOnAdminRoute ? 'Admin Panel' : 'Make an Appointment' }}
+      </a>
 
     </div>
 

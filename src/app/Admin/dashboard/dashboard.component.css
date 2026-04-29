@@ -1,0 +1,123 @@
+ .admin-page {
+  min-height: 100dvh;
+  background: radial-gradient(1200px 600px at 50% -10%, #eef8ff 0%, #ffffff 55%);
+  padding: 22px 14px 48px;
+}
+
+.admin-shell {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.admin-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 8px 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: rgba(15, 23, 42, 0.7);
+  font-size: 14px;
+}
+
+.grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.card {
+  text-decoration: none;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.09);
+}
+
+.card-title {
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.card-desc {
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 13px;
+}
+
+.section {
+  margin-top: 22px;
+  scroll-margin-top: 110px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.section-header p {
+  margin: 6px 0 12px;
+  color: rgba(15, 23, 42, 0.7);
+  font-size: 13px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 6px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+}
+
+.muted {
+  color: rgba(15, 23, 42, 0.7);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

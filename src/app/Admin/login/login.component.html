@@ -1,0 +1,122 @@
+<div class="login-page">
+  <div class="login-card" role="region" aria-label="Admin login">
+    <h1 class="login-title">Admin Login</h1>
+    <p class="login-subtitle">Sign in with your mobile number</p>
+
+    <form class="login-form" autocomplete="on" (submit)="onSubmit($event)">
+      <label class="field">
+        <span class="label">Mobile</span>
+        <input
+          class="input"
+          type="tel"
+          name="mobile"
+          inputmode="numeric"
+          autocomplete="tel"
+          placeholder="Enter mobile number"
+          [(ngModel)]="mobile"
+        />
+      </label>
+
+      <label class="field">
+        <span class="label">Password</span>
+        <input
+          class="input"
+          type="password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="Enter password"
+          [(ngModel)]="password"
+        />
+      </label>
+
+      <div class="actions-row">
+        <button type="button" class="link-btn" (click)="openResetPopup()">Forgot password?</button>
+      </div>
+
+      <button type="submit" class="primary-btn" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Logging in...' : 'Login' }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Reset password popup -->
+<div
+  class="modal-backdrop"
+  *ngIf="showResetPopup"
+  (click)="closeResetPopup()"
+  aria-hidden="true"
+></div>
+
+<div class="modal" *ngIf="showResetPopup" role="dialog" aria-label="Reset password">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Reset Password</h2>
+      <button type="button" class="icon-btn" (click)="closeResetPopup()" aria-label="Close">
+        ✕
+      </button>
+    </div>
+
+    <p class="modal-subtitle">Enter mobile, old password and new password</p>
+
+    <form class="login-form" (submit)="onResetSubmit($event)">
+      <label class="field">
+        <span class="label">Mobile</span>
+        <input
+          class="input"
+          type="tel"
+          name="resetMobile"
+          inputmode="numeric"
+          autocomplete="tel"
+          placeholder="Enter mobile number"
+          [(ngModel)]="resetMobile"
+        />
+      </label>
+
+      <label class="field">
+        <span class="label">Old Password</span>
+        <input
+          class="input"
+          type="password"
+          name="oldPassword"
+          autocomplete="current-password"
+          placeholder="Enter old password"
+          [(ngModel)]="oldPassword"
+        />
+      </label>
+
+      <label class="field">
+        <span class="label">New Password</span>
+        <input
+          class="input"
+          type="password"
+          name="newPassword"
+          autocomplete="new-password"
+          placeholder="newPassword123"
+          [(ngModel)]="newPassword"
+        />
+      </label>
+
+      <label class="field">
+        <span class="label">Confirm New Password</span>
+        <input
+          class="input"
+          type="password"
+          name="confirmNewPassword"
+          autocomplete="new-password"
+          placeholder="Confirm new password"
+          [(ngModel)]="confirmNewPassword"
+        />
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" (click)="closeResetPopup()" [disabled]="isResetSubmitting">
+          Cancel
+        </button>
+        <button type="submit" class="primary-btn" [disabled]="isResetSubmitting">
+          {{ isResetSubmitting ? 'Submitting...' : 'Reset Password' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
