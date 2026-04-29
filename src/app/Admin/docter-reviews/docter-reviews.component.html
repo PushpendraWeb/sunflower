@@ -1,0 +1,123 @@
+<div class="page">
+  <div class="shell">
+    <div class="head">
+      <h1>Doctor Reviews</h1>
+      <div class="table-tools">
+        <input type="text" class="search-input" [(ngModel)]="searchQuery" placeholder="Search review..." />
+        <button type="button" class="btn" (click)="loadReviews()" [disabled]="isLoading">
+          {{ isLoading ? 'Loading...' : 'Refresh' }}
+        </button>
+      </div>
+    </div>
+
+    <form class="edit-card" *ngIf="editingId" (ngSubmit)="submitUpdate()">
+      <h2>Edit Review #{{ editingId }}</h2>
+      <div class="form-grid">
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" [(ngModel)]="formModel.name" required />
+        </label>
+        <label>
+          <span>Mobile</span>
+          <input type="text" name="mobileNo" [(ngModel)]="formModel.mobileNo" required />
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" [(ngModel)]="formModel.email" required />
+        </label>
+        <label>
+          <span>Rating</span>
+          <input type="number" name="rating" [(ngModel)]="formModel.rating" min="1" max="5" required />
+        </label>
+        <label>
+          <span>Reward</span>
+          <input type="text" name="reward" [(ngModel)]="formModel.reward" />
+        </label>
+        <label class="check-field">
+          <span>Status</span>
+          <input type="checkbox" name="status" [(ngModel)]="formModel.status" />
+        </label>
+      </div>
+      <label class="mt-2 d-block">
+        <span>Review Details</span>
+        <textarea name="review_details" [(ngModel)]="formModel.review_details" rows="3" required></textarea>
+      </label>
+      <div class="actions">
+        <button type="submit" class="btn" [disabled]="isSubmitting">{{ isSubmitting ? 'Saving...' : 'Update' }}</button>
+        <button type="button" class="btn" (click)="resetForm()">Cancel</button>
+      </div>
+    </form>
+
+    <div class="table-card">
+      <div class="table-wrap" *ngIf="filteredReviews.length > 0; else emptyState">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Rating</th>
+              <th>Review</th>
+              <th>Reward</th>
+              <th>Accepted</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of filteredReviews">
+              <td>{{ r.review_id }}</td>
+              <td>{{ r.name }}</td>
+              <td>{{ r.mobileNo }}</td>
+              <td>{{ r.email }}</td>
+              <td>{{ r.rating }}</td>
+              <td>{{ r.review_details }}</td>
+              <td>{{ r.reward || '-' }}</td>
+              <td>{{ r.accepted_reward ? 'Yes' : 'No' }}</td>
+              <td>{{ r.status ? 'Active' : 'Inactive' }}</td>
+              <td class="actions-col">
+                <button type="button" class="btn sm" (click)="startEdit(r)">Edit</button>
+                <button type="button" class="btn sm" (click)="openRewardModal(r)">Reward</button>
+                <button type="button" class="btn sm" (click)="updateStatus(r)">
+                  {{ r.status ? 'Deactivate' : 'Activate' }}
+                </button>
+                <button type="button" class="btn sm danger" (click)="deleteReview(r)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #emptyState>
+        <p class="empty">{{ isLoading ? 'Loading reviews...' : 'No reviews found.' }}</p>
+      </ng-template>
+    </div>
+
+    <div class="reward-modal-backdrop" *ngIf="rewardModalOpen">
+      <div class="reward-modal" (click)="closeRewardModal()">
+        <div class="reward-modal-panel" (click)="$event.stopPropagation()">
+          <div class="reward-modal-header">
+            <h2>Update Reward</h2>
+            <button type="button" class="btn sm" (click)="closeRewardModal()">✕</button>
+          </div>
+          <div class="reward-modal-body" *ngIf="rewardTarget">
+            <p><strong>{{ rewardTarget.name }}</strong> (ID: {{ rewardTarget.review_id }})</p>
+            <label class="reward-field">
+              <span>Reward</span>
+              <input type="text" [(ngModel)]="rewardTarget.rewardDraft" />
+            </label>
+            <label class="inline-check mt-2">
+              <input type="checkbox" [(ngModel)]="rewardTarget.acceptedRewardDraft" />
+              <span>Accepted reward</span>
+            </label>
+            <div class="actions mt-3">
+              <button type="button" class="btn" (click)="updateReward()">Save</button>
+              <button type="button" class="btn" (click)="closeRewardModal()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -61,27 +61,10 @@ export class HeaderComponent {
     }
   }
 
-  scrollToAdminSection(sectionId: string, event: Event): void {
-    event.preventDefault();
-    const scroll = () => {
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    const path = this.router.url.split('?')[0].split('#')[0];
-    const onDashboard = path === '/admin/dashboard';
-
-    if (onDashboard) {
-      scroll();
-      history.replaceState(null, '', '/admin/dashboard');
-      return;
-    }
-
-    this.router.navigateByUrl('/admin/dashboard').then(() => setTimeout(scroll, 150));
-  }
-
   logout(event: Event): void {
     event.preventDefault();
     localStorage.removeItem('admin_logged_in');
+    localStorage.removeItem('AuthData');
     this.refreshAuthState();
     this.router.navigateByUrl('/admin/login');
   }

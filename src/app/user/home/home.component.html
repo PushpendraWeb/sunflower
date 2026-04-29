@@ -66,7 +66,7 @@
   <!-- About Section -->
   <section id="about" class="about section">
 
-    <div class="container">
+    <div class="container-fluid px-3 px-lg-4">
 
       <div class="row gy-4 gx-5">
 
@@ -232,7 +232,7 @@
 
       <div class="row gy-4 justify-content-center">
 
-        <div class="col-12 col-md-10 col-lg-8" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-12" data-aos="fade-up" data-aos-delay="100">
           <div class="team-member d-flex align-items-start justify-content-center">
             <div class="pic">
               <img
@@ -245,18 +245,40 @@
               />
             </div>
             <div class="member-info">
-              <h4>Dr. Jayesh Prabhakar Waghulde</h4>
-              <span>Nephrologist (Intensivist & Critical Care Nephrology)</span>
-              <span>KIDNEY TRANSPLANT & IMMUNOLOGIST</span>
-              <p>
-                23+ years of experience in nephrology, dialysis, kidney transplant, transplant failure, and graft
-                dysfunction.
-              </p>
-              <div class="social">
-                <a href=""><i class="bi bi-twitter-x"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""> <i class="bi bi-linkedin"></i> </a>
+              <div class="member-content-grid">
+                <div class="member-about">
+                  <h4>Dr. Jayesh Prabhakar Waghulde</h4>
+                  <span>Nephrologist (Intensivist & Critical Care Nephrology)</span>
+                  <span>KIDNEY TRANSPLANT & IMMUNOLOGIST</span>
+                  <p>
+                    23+ years of experience in nephrology, dialysis, kidney transplant, transplant failure, and graft
+                    dysfunction.
+                  </p>
+                  <div class="social">
+                    <a href=""><i class="bi bi-twitter-x"></i></a>
+                    <a href=""><i class="bi bi-facebook"></i></a>
+                    <a href=""><i class="bi bi-instagram"></i></a>
+                    <a href=""> <i class="bi bi-linkedin"></i> </a>
+                  </div>
+                </div>
+                <div class="doctor-timings-box" aria-label="Doctor consultation timings">
+                  <div class="doctor-timings-table">
+                    <div class="doctor-timings-head">
+                      <span>Day</span>
+                      <span>Morning</span>
+                      <span>Evening</span>
+                      <span>City</span>
+                    </div>
+                    <ul class="doctor-timings-list">
+                      <li *ngFor="let t of doctorTimings">
+                        <span>{{ t.day }}</span>
+                        <span>{{ t.morningTime }}</span>
+                        <span>{{ t.evningTime }}</span>
+                        <span>{{ t.cityName }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -298,27 +320,27 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" *ngFor="let r of reviews">
                 <div class="testimonial-item">
-                  <div class="d-flex">
-                    <img [src]="r.avatarUrl" class="testimonial-img flex-shrink-0" alt="" />
-                    <div>
-                      <h3>{{ r.name }}</h3>
-                      <h4>{{ r.subtitle }}</h4>
-                      <p class="review-mobile-line mb-0 small text-muted">{{ r.mobile }}</p>
-                      <div class="stars" [attr.aria-label]="'Rating ' + r.rating + ' out of 5'">
-                        <ng-container *ngFor="let s of starIndexes">
-                          <i
-                            class="bi"
-                            [class.bi-star-fill]="s <= r.rating"
-                            [class.bi-star]="s > r.rating"
-                          ></i>
-                        </ng-container>
-                      </div>
+                  <div>
+                    <h3>{{ r.name }}</h3>
+                    <h4>{{ r.subtitle }}</h4>
+                    <p class="review-mobile-line mb-0 small text-muted">{{ r.mobile }}</p>
+                    <div class="stars" [attr.aria-label]="'Rating ' + r.rating + ' out of 5'">
+                      <ng-container *ngFor="let s of starIndexes">
+                        <i
+                          class="bi"
+                          [class.bi-star-fill]="s <= r.rating"
+                          [class.bi-star]="s > r.rating"
+                        ></i>
+                      </ng-container>
                     </div>
                   </div>
                   <p>
                     <i class="bi bi-quote quote-icon-left" aria-hidden="true"></i>
                     <span>{{ r.text }}</span>
                     <i class="bi bi-quote quote-icon-right" aria-hidden="true"></i>
+                  </p>
+                  <p class="review-reward-line" *ngIf="r.reward">
+                    <strong>Reward:</strong> {{ r.reward }}
                   </p>
                 </div>
               </div>
@@ -361,20 +383,36 @@
                 required
               />
             </div>
-            <div class="mb-3">
-              <label class="form-label" for="revMobile">Mobile</label>
-              <input
-                id="revMobile"
-                name="revMobile"
-                type="tel"
-                class="form-control"
-                [(ngModel)]="reviewDraft.mobile"
-                inputmode="numeric"
-                autocomplete="tel"
-                maxlength="10"
-                placeholder="10-digit mobile"
-                required
-              />
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="revMobile">Mobile</label>
+                <input
+                  id="revMobile"
+                  name="revMobile"
+                  type="tel"
+                  class="form-control"
+                  [(ngModel)]="reviewDraft.mobile"
+                  inputmode="numeric"
+                  autocomplete="tel"
+                  maxlength="10"
+                  placeholder="10-digit mobile"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="revEmail">Email</label>
+                <input
+                  id="revEmail"
+                  name="revEmail"
+                  type="email"
+                  class="form-control"
+                  [(ngModel)]="reviewDraft.email"
+                  autocomplete="email"
+                  maxlength="120"
+                  placeholder="neeti@example.com"
+                  required
+                />
+              </div>
             </div>
             <div class="mb-3">
               <span class="form-label d-block">Rating</span>
@@ -407,7 +445,9 @@
             <p class="text-danger small mb-2" *ngIf="reviewFormError">{{ reviewFormError }}</p>
             <div class="d-flex flex-wrap gap-2 justify-content-end">
               <button type="button" class="btn btn-outline-secondary" (click)="closeReviewModal()">Cancel</button>
-              <button type="submit" class="btn btn-add-review">Submit review</button>
+              <button type="submit" class="btn btn-add-review" [disabled]="isSubmittingReview">
+                {{ isSubmittingReview ? 'Submitting...' : 'Submit review' }}
+              </button>
             </div>
           </form>
         </div>
@@ -423,6 +463,7 @@
     <div class="container section-title" data-aos="fade-up">
       <h2>Gallery</h2>
       <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      <a routerLink="/gallery" class="gallery-more-btn">More</a>
     </div><!-- End Section Title -->
 
     <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
@@ -563,31 +604,37 @@
         </div>
 
         <div class="col-lg-8">
-          <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+          <form class="php-email-form" data-aos="fade-up" data-aos-delay="200" (ngSubmit)="submitEnquiry()">
             <div class="row gy-4">
 
               <div class="col-md-6">
-                <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                <input type="text" name="enqName" class="form-control" placeholder="Your Name" [(ngModel)]="enquiryDraft.name" required>
               </div>
 
-              <div class="col-md-6 ">
-                <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-              </div>
-
-              <div class="col-md-12">
-                <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+              <div class="col-md-6">
+                <input type="tel" class="form-control" name="enqMobile" placeholder="Mobile Number" [(ngModel)]="enquiryDraft.mobileNo" inputmode="numeric" maxlength="10" required>
               </div>
 
               <div class="col-md-12">
-                <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                <input type="email" class="form-control" name="enqEmail" placeholder="Your Email" [(ngModel)]="enquiryDraft.email" required>
+              </div>
+
+              <div class="col-md-12">
+                <input type="text" class="form-control" name="enqSubject" placeholder="Subject" [(ngModel)]="enquiryDraft.subject" required>
+              </div>
+
+              <div class="col-md-12">
+                <textarea class="form-control" name="enqDetails" rows="6" placeholder="Message" [(ngModel)]="enquiryDraft.enquiry_details" required></textarea>
               </div>
 
               <div class="col-md-12 text-center">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
+                <div class="loading" *ngIf="isSubmittingEnquiry">Loading</div>
+                <div class="error-message" *ngIf="enquiryFormError">{{ enquiryFormError }}</div>
+                <div class="sent-message" *ngIf="enquirySuccess">{{ enquirySuccess }}</div>
 
-                <button type="submit">Enquire Now</button>
+                <button type="submit" [disabled]="isSubmittingEnquiry">
+                  {{ isSubmittingEnquiry ? 'Submitting...' : 'Enquire Now' }}
+                </button>
               </div>
 
             </div>

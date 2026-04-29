@@ -1,0 +1,22 @@
+<main class="gallery-page">
+  <section class="gallery-hero section">
+    <div class="container">
+      <div class="gallery-hero-inner">
+        <div class="gallery-hero-top">
+          <h1>Gallery</h1>
+          <a routerLink="/" fragment="gallery" class="gallery-back-btn">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-grid-section section">
+    <div class="container">
+      <div class="gallery-grid">
+        <article class="gallery-card" *ngFor="let image of images">
+          <img [src]="image.src" [alt]="image.alt" class="gallery-card-image" loading="lazy" />
+        </article>
+      </div>
+    </div>
+  </section>
+</main>

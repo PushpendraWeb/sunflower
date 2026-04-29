@@ -26,7 +26,8 @@ export class BaseService {
     return getWindow();
   }
 
-  public serverUrl: string = 'http://localhost:2000';
+  // public serverUrl: string = 'http://localhost:2000';
+  public serverUrl: string = 'https://sunflowerapi.vercel.app';
   public setmenu: boolean = false;
   public epmplytype: boolean = false;
   public inventorytype: boolean = false;
@@ -86,6 +87,10 @@ export class BaseService {
 
   public PutAuth(routePath: string, data: any) {
     return this.http.put<any>(this.baseurl + routePath, data, this.getHeader(true))
+  }
+
+  public PatchAuth(routePath: string, data: any) {
+    return this.http.patch<any>(this.baseurl + routePath, data, this.getHeader(true))
   }
 
   public Delete(routePath: string) {
@@ -151,7 +156,8 @@ export class BaseService {
     const currentUser = this.GetLoggedInUser();
     if (currentUser != null) {
       this.sulg = currentUser;
-      return currentUser;
+      const authData = currentUser as AuthModel & { token?: string };
+      return authData.access_token || authData.AccessToken || authData.token || null;
     }
     else {
       return null;

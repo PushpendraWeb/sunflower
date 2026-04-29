@@ -1,8 +1,9 @@
 export const APIConstants = {
-    Login: "/user/loginAdmin",
-    ValidateToken: "/user/validate-token",
-    Logout: "/user/logout",
-    UserById: "/user/userById",
+    Login: "/users/loginAdmin",
+    CheckAuth: "/users/checkauth",
+    ValidateToken: "/users/validate-token",
+    Logout: "/users/logout",
+    UserById: "/users/userById",
     
     // Role Management APIs
     RoleCreate: "/role/create",
@@ -166,7 +167,31 @@ export const APIConstants = {
     TransactionInvoice: "/transaction/schedule-call-invoice",
     
     // Dashboard APIs
-    AdminDashboard: "/user/admin-dashboard"
+    AdminDashboard: "/user/admin-dashboard",
+
+    // Docter Timings APIs
+    DocterTimingsCreate: "/docterTimings/create",
+    DocterTimingsUpdate: "/docterTimings/update",
+    DocterTimingsDelete: "/docterTimings/delete",
+    DocterTimingsGetById: "/docterTimings/getbyid",
+    DocterTimingsGetAll: "/docterTimings/getall",
+
+    // Reviews APIs
+    ReviewsCreate: "/reviews/create",
+    ReviewsActive: "/reviews/activeReview",
+    ReviewsGetAll: "/reviews/getall",
+    ReviewsGetById: "/reviews/getbyid",
+    ReviewsUpdate: "/reviews/update",
+    ReviewsUpdateStatus: "/reviews/update-status",
+    ReviewsUpdateReward: "/reviews/update-reward",
+    ReviewsDelete: "/reviews/delete",
+
+    // Enquiry APIs
+    EnquiryCreate: "/enquiry/create",
+    EnquiryGetAll: "/enquiry/getall",
+    EnquiryGetById: "/enquiry/getbyid",
+    EnquiryUpdate: "/enquiry/update",
+    EnquiryDelete: "/enquiry/delete"
 }
 
 export class Veriable {

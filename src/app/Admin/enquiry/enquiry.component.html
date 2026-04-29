@@ -1,0 +1,89 @@
+<div class="page">
+  <div class="shell">
+    <div class="head">
+      <h1>Enquiry</h1>
+      <div class="table-tools">
+        <input type="text" class="search-input" [(ngModel)]="searchQuery" placeholder="Search enquiry..." />
+        <button type="button" class="btn" (click)="loadEnquiries()" [disabled]="isLoading">
+          {{ isLoading ? 'Loading...' : 'Refresh' }}
+        </button>
+      </div>
+    </div>
+
+    <form class="edit-card" *ngIf="editingId" (ngSubmit)="submitUpdate()">
+      <h2>Edit Enquiry #{{ editingId }}</h2>
+      <div class="form-grid">
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" [(ngModel)]="formModel.name" required />
+        </label>
+        <label>
+          <span>Mobile</span>
+          <input type="text" name="mobileNo" [(ngModel)]="formModel.mobileNo" required />
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" [(ngModel)]="formModel.email" required />
+        </label>
+        <label>
+          <span>Subject</span>
+          <input type="text" name="subject" [(ngModel)]="formModel.subject" required />
+        </label>
+        <label>
+          <span>User Img</span>
+          <input type="text" name="user_img" [(ngModel)]="formModel.user_img" />
+        </label>
+        <label class="check-field">
+          <span>Status</span>
+          <input type="checkbox" name="status" [(ngModel)]="formModel.status" />
+        </label>
+      </div>
+      <label class="mt-2 d-block">
+        <span>Enquiry Details</span>
+        <textarea name="enquiry_details" [(ngModel)]="formModel.enquiry_details" rows="3" required></textarea>
+      </label>
+      <div class="actions">
+        <button type="submit" class="btn" [disabled]="isSubmitting">{{ isSubmitting ? 'Saving...' : 'Update' }}</button>
+        <button type="button" class="btn" (click)="resetForm()">Cancel</button>
+      </div>
+    </form>
+
+    <div class="table-card">
+      <div class="table-wrap" *ngIf="filteredEnquiries.length > 0; else emptyState">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Details</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of filteredEnquiries">
+              <td>{{ e.enquiry_id }}</td>
+              <td>{{ e.name }}</td>
+              <td>{{ e.mobileNo }}</td>
+              <td>{{ e.email }}</td>
+              <td>{{ e.subject }}</td>
+              <td>{{ e.enquiry_details }}</td>
+              <td>{{ e.status ? 'Active' : 'Inactive' }}</td>
+              <td class="actions-col">
+                <button type="button" class="btn sm" (click)="startEdit(e)">Edit</button>
+                <button type="button" class="btn sm danger" (click)="deleteEnquiry(e)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #emptyState>
+        <p class="empty">{{ isLoading ? 'Loading enquiries...' : 'No enquiries found.' }}</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

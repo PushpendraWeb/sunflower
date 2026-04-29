@@ -4,12 +4,15 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnInit,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { BaseService } from '../../service/BaseService.service';
+import { APIConstants } from '../../service/apiconstants';
 
 export type PatientReview = {
   id: string;
@@ -18,10 +21,8 @@ export type PatientReview = {
   rating: number;
   text: string;
   subtitle: string;
-  avatarUrl: string;
+  reward?: string;
 };
-
-const REVIEWS_STORAGE_KEY = 'sunflower_patient_reviews_v1';
 
 const DEFAULT_REVIEWS: PatientReview[] = [
   {
@@ -30,7 +31,7 @@ const DEFAULT_REVIEWS: PatientReview[] = [
     mobile: '98******71',
     rating: 5,
     subtitle: 'Patient · Nashik',
-    avatarUrl: '/img/testimonials/testimonials-1.jpg',
+    reward: 'Coupon',
     text:
       'Clear explanations at every visit. Dialysis planning and diet advice were practical. Staff is supportive and the clinic runs on time.',
   },
@@ -40,7 +41,7 @@ const DEFAULT_REVIEWS: PatientReview[] = [
     mobile: '97******33',
     rating: 5,
     subtitle: 'Patient · Nashik',
-    avatarUrl: '/img/testimonials/testimonials-2.jpg',
+    reward: 'Gift Voucher',
     text:
       'We came for a second opinion on CKD management. Felt heard and got a sensible treatment plan without unnecessary tests.',
   },
@@ -50,7 +51,7 @@ const DEFAULT_REVIEWS: PatientReview[] = [
     mobile: '91******09',
     rating: 4,
     subtitle: 'Patient · Nashik',
-    avatarUrl: '/img/testimonials/testimonials-3.jpg',
+    reward: '',
     text:
       'Post-transplant follow-up has been thorough. Immunosuppression changes were explained well and phone queries were answered promptly.',
   },
@@ -60,7 +61,7 @@ const DEFAULT_REVIEWS: PatientReview[] = [
     mobile: '90******54',
     rating: 5,
     subtitle: 'Patient · Nashik',
-    avatarUrl: '/img/testimonials/testimonials-4.jpg',
+    reward: 'Discount',
     text:
       'Professional team and calm environment. Appointments are easy to schedule and the doctor spends enough time with each patient.',
   },
@@ -70,7 +71,7 @@ const DEFAULT_REVIEWS: PatientReview[] = [
     mobile: '99******88',
     rating: 5,
     subtitle: 'Patient · Nashik',
-    avatarUrl: '/img/testimonials/testimonials-5.jpg',
+    reward: '',
     text:
       'Excellent nephrology care — from diagnosis to long-term monitoring. I recommend Sunflower Health Plus to anyone with kidney concerns.',
   },
@@ -82,6 +83,22 @@ type SwiperInstance = {
   slideTo: (index: number, speed?: number) => void;
 };
 
+type DoctorTiming = {
+  day: string;
+  morningTime: string;
+  evningTime: string;
+  cityName: string;
+};
+
+type ActiveReviewApi = {
+  review_id: number;
+  name: string;
+  mobileNo: number | string;
+  rating: number;
+  review_details: string;
+  reward?: string;
+};
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -89,9 +106,18 @@ type SwiperInstance = {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements AfterViewInit, OnDestroy {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly blogUrl = '/blog';
   readonly starIndexes = [1, 2, 3, 4, 5] as const;
+  doctorTimings: DoctorTiming[] = [
+    { day: 'Monday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
+    { day: 'Tuesday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
+    { day: 'Wednesday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
+    { day: 'Thursday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
+    { day: 'Friday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
+    { day: 'Saturday', morningTime: '10:00 AM - 1:00 PM', evningTime: '6:00 PM - 8:00 PM', cityName: 'Nashik' },
+    { day: 'Sunday', morningTime: 'Emergency Only', evningTime: 'Emergency Only', cityName: 'Nashik' },
+  ];
 
   @ViewChild('reviewsSwiper', { static: false }) reviewsSwiperRef?: ElementRef<HTMLElement>;
 
@@ -102,14 +128,74 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   reviewDraft = {
     name: '',
     mobile: '',
+    email: '',
     rating: 5,
     text: '',
   };
+  isSubmittingReview = false;
+
+  enquiryDraft = {
+    name: '',
+    mobileNo: '',
+    email: '',
+    subject: '',
+    enquiry_details: '',
+  };
+  isSubmittingEnquiry = false;
+  enquiryFormError = '';
+  enquirySuccess = '';
 
   private reviewsSwiper?: SwiperInstance;
 
-  constructor(private readonly cdr: ChangeDetectorRef) {
-    this.reviews = this.loadReviews();
+  constructor(
+    private readonly cdr: ChangeDetectorRef,
+    private readonly baseService: BaseService
+  ) {
+    this.reviews = [...DEFAULT_REVIEWS];
+  }
+
+  ngOnInit(): void {
+    this.loadActiveReviews();
+    this.baseService.Get(APIConstants.DocterTimingsGetAll).subscribe({
+      next: (res: any) => {
+        const data = res?.data ?? res ?? [];
+        if (Array.isArray(data) && data.length > 0) {
+          this.doctorTimings = data.map((item: any) => ({
+            day: item?.day ?? '',
+            morningTime: item?.morningTime ?? '-',
+            evningTime: item?.evningTime ?? '-',
+            cityName: item?.cityName ?? 'Nashik',
+          }));
+        }
+      },
+      error: () => {
+        // Keep default timings on API failure.
+      },
+    });
+  }
+
+  private loadActiveReviews(): void {
+    this.baseService.Get(APIConstants.ReviewsActive).subscribe({
+      next: (res: any) => {
+        const data = (res?.data ?? res ?? []) as ActiveReviewApi[];
+        if (!Array.isArray(data) || data.length === 0) return;
+
+        this.reviews = data.map((r) => ({
+          id: String(r.review_id ?? `r-${Date.now()}`),
+          name: r.name ?? 'Anonymous',
+          mobile: this.maskMobile(String(r.mobileNo ?? '')),
+          rating: Number(r.rating || 0),
+          text: r.review_details ?? '',
+          subtitle: 'Patient Review',
+          reward: r.reward ?? '',
+        }));
+        this.cdr.detectChanges();
+        setTimeout(() => this.initReviewsSwiper(), 0);
+      },
+      error: () => {
+        // Keep fallback reviews on API failure.
+      },
+    });
   }
 
   ngAfterViewInit(): void {
@@ -138,7 +224,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   openReviewModal(): void {
     this.reviewFormError = '';
-    this.reviewDraft = { name: '', mobile: '', rating: 5, text: '' };
+    this.reviewDraft = { name: '', mobile: '', email: '', rating: 5, text: '' };
     this.reviewModalOpen = true;
   }
 
@@ -161,6 +247,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     this.reviewFormError = '';
     const name = this.reviewDraft.name.trim();
     const mobile = this.reviewDraft.mobile.replace(/\s/g, '');
+    const email = this.reviewDraft.email.trim();
     const text = this.reviewDraft.text.trim();
     const rating = this.reviewDraft.rating;
 
@@ -172,6 +259,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       this.reviewFormError = 'Please enter a valid 10-digit Indian mobile number.';
       return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.reviewFormError = 'Please enter a valid email address.';
+      return;
+    }
     if (text.length < 12) {
       this.reviewFormError = 'Please write a few more words in your review (at least 12 characters).';
       return;
@@ -181,49 +272,89 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const avatarIndex = (this.reviews.length % 5) + 1;
-    const entry: PatientReview = {
-      id: `u-${Date.now()}`,
+    const payload = {
       name,
-      mobile: this.maskMobile(mobile),
+      mobileNo: Number(mobile),
+      email,
+      user_img: '',
       rating,
-      text,
-      subtitle: 'Patient · Nashik',
-      avatarUrl: `/img/testimonials/testimonials-${avatarIndex}.jpg`,
+      review_details: text,
     };
 
-    this.reviews = [entry, ...this.reviews];
-    this.persistReviews();
-    this.reviewModalOpen = false;
-    this.reviewDraft = { name: '', mobile: '', rating: 5, text: '' };
-    this.cdr.detectChanges();
-    setTimeout(() => this.initReviewsSwiper(), 0);
+    this.isSubmittingReview = true;
+    this.baseService.Post(APIConstants.ReviewsCreate, payload).subscribe({
+      next: () => {
+        this.reviewModalOpen = false;
+        this.reviewDraft = { name: '', mobile: '', email: '', rating: 5, text: '' };
+        this.loadActiveReviews();
+      },
+      error: () => {
+        this.reviewFormError = 'Unable to submit review. Please try again.';
+      },
+      complete: () => {
+        this.isSubmittingReview = false;
+      },
+    });
+  }
+
+  submitEnquiry(): void {
+    this.enquiryFormError = '';
+    this.enquirySuccess = '';
+
+    const name = this.enquiryDraft.name.trim();
+    const mobileNo = this.enquiryDraft.mobileNo.replace(/\s/g, '');
+    const email = this.enquiryDraft.email.trim();
+    const subject = this.enquiryDraft.subject.trim();
+    const enquiry_details = this.enquiryDraft.enquiry_details.trim();
+
+    if (name.length < 2) {
+      this.enquiryFormError = 'Please enter your name.';
+      return;
+    }
+    if (!/^[6-9]\d{9}$/.test(mobileNo)) {
+      this.enquiryFormError = 'Please enter a valid 10-digit mobile number.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.enquiryFormError = 'Please enter a valid email address.';
+      return;
+    }
+    if (subject.length < 2) {
+      this.enquiryFormError = 'Please enter subject.';
+      return;
+    }
+    if (enquiry_details.length < 5) {
+      this.enquiryFormError = 'Please enter enquiry details.';
+      return;
+    }
+
+    const payload = {
+      name,
+      mobileNo: Number(mobileNo),
+      email,
+      user_img: '',
+      subject,
+      enquiry_details,
+    };
+
+    this.isSubmittingEnquiry = true;
+    this.baseService.Post(APIConstants.EnquiryCreate, payload).subscribe({
+      next: () => {
+        this.enquirySuccess = 'Enquiry submitted successfully.';
+        this.enquiryDraft = { name: '', mobileNo: '', email: '', subject: '', enquiry_details: '' };
+      },
+      error: () => {
+        this.enquiryFormError = 'Unable to submit enquiry. Please try again.';
+      },
+      complete: () => {
+        this.isSubmittingEnquiry = false;
+      },
+    });
   }
 
   maskMobile(digits: string): string {
     if (digits.length !== 10) return digits;
     return `${digits.slice(0, 2)}******${digits.slice(8)}`;
-  }
-
-  private loadReviews(): PatientReview[] {
-    try {
-      const raw = localStorage.getItem(REVIEWS_STORAGE_KEY);
-      if (!raw) return [...DEFAULT_REVIEWS];
-      const parsed = JSON.parse(raw) as PatientReview[];
-      if (!Array.isArray(parsed) || parsed.length === 0) return [...DEFAULT_REVIEWS];
-      const cleaned = parsed.filter((r) => r && r.id && r.name && r.text);
-      return cleaned.length > 0 ? cleaned : [...DEFAULT_REVIEWS];
-    } catch {
-      return [...DEFAULT_REVIEWS];
-    }
-  }
-
-  private persistReviews(): void {
-    try {
-      localStorage.setItem(REVIEWS_STORAGE_KEY, JSON.stringify(this.reviews));
-    } catch {
-      /* ignore quota / private mode */
-    }
   }
 
   private destroyReviewsSwiper(): void {

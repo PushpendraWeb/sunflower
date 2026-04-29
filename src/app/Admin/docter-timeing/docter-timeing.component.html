@@ -1,0 +1,98 @@
+<div class="page">
+  <div class="shell">
+    <div class="head">
+      <h1>Doctor Timing</h1>
+      <p>Create/update doctor timings and manage list.</p>
+    </div>
+
+    <form class="form-card" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <label class="field">
+          <span>Doctor Name</span>
+          <input type="text" name="docterName" [(ngModel)]="formModel.docterName" required />
+        </label>
+
+        <label class="field">
+          <span>City Name</span>
+          <input type="text" name="cityName" [(ngModel)]="formModel.cityName" required />
+        </label>
+
+        <label class="field">
+          <span>Day</span>
+          <select name="day" [(ngModel)]="formModel.day" required>
+            <option value="" disabled>Select day</option>
+            <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Morning Time</span>
+          <input type="text" name="morningTime" [(ngModel)]="formModel.morningTime" placeholder="10:00 AM - 01:00 PM" />
+        </label>
+
+        <label class="field">
+          <span>Evening Time</span>
+          <input type="text" name="evningTime" [(ngModel)]="formModel.evningTime" placeholder="05:00 PM - 08:00 PM" />
+        </label>
+
+        <label class="field field-check">
+          <span>Status</span>
+          <input type="checkbox" name="status" [(ngModel)]="formModel.status" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Saving...' : (editingId ? 'Update' : 'Create') }}
+        </button>
+        <button type="button" class="btn" (click)="resetForm()">Reset</button>
+      </div>
+    </form>
+
+    <div class="table-card">
+      <div class="table-head">
+        <h2>Timings List</h2>
+        <div class="table-tools">
+          <input type="text" class="search-input" [(ngModel)]="searchQuery" placeholder="Search timing..." />
+          <button type="button" class="btn" (click)="loadAllTimings()" [disabled]="isLoading">
+            {{ isLoading ? 'Loading...' : 'Refresh' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrap" *ngIf="filteredTimings.length > 0; else emptyState">
+        <table>
+          <thead>
+            <tr>
+              <th>Doctor</th>
+              <th>City</th>
+              <th>Day</th>
+              <th>Morning</th>
+              <th>Evening</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of filteredTimings">
+              <td>{{ row.docterName }}</td>
+              <td>{{ row.cityName }}</td>
+              <td>{{ row.day }}</td>
+              <td>{{ row.morningTime }}</td>
+              <td>{{ row.evningTime }}</td>
+              <td>{{ row.status ? 'Active' : 'Inactive' }}</td>
+              <td class="row-actions">
+                <button type="button" class="btn sm" (click)="onEdit(row)">Edit</button>
+                <button type="button" class="btn sm danger" (click)="onDelete(row)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #emptyState>
+        <p class="empty">{{ isLoading ? 'Loading timings...' : 'No doctor timings found.' }}</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

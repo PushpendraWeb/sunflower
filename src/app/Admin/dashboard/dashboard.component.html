@@ -3,65 +3,118 @@
     <div class="admin-hero">
       <div>
         <h1 class="title">Admin Dashboard</h1>
-        <p class="subtitle">Manage timings, reviews and enquiries.</p>
+        <p class="subtitle">
+          Manage timings, reviews and enquiries.
+          <span class="live-tag">{{ isLoading ? 'Refreshing...' : 'Live (auto refresh 15s)' }}</span>
+        </p>
       </div>
-    </div>
-
-    <div class="grid">
-      <a class="card" href="#doctor-timing">
-        <div class="card-title">Doctor Timing</div>
-        <div class="card-desc">Set OPD timings and availability.</div>
-      </a>
-      <a class="card" href="#reviews">
-        <div class="card-title">Reviews</div>
-        <div class="card-desc">See and manage patient reviews.</div>
-      </a>
-      <a class="card" href="#enquiry">
-        <div class="card-title">Enquiry</div>
-        <div class="card-desc">View contact/enquiry submissions.</div>
-      </a>
+      <button type="button" class="refresh-btn" (click)="loadDashboardData()" [disabled]="isLoading">
+        {{ isLoading ? 'Loading...' : 'Refresh Now' }}
+      </button>
     </div>
 
     <section id="doctor-timing" class="section">
       <div class="section-header">
         <h2>Doctor Timing</h2>
-        <p>Timing configuration placeholder (we can connect to DB/API next).</p>
+        <p>Real-time doctor timing data.</p>
       </div>
       <div class="panel">
-        <div class="row">
-          <div class="pill">Mon–Sat</div>
-          <div class="muted">10:00 AM – 1:00 PM</div>
+        <div class="search-row">
+          <input type="text" [(ngModel)]="timingSearch" placeholder="Search timing..." />
         </div>
-        <div class="row">
-          <div class="pill">Evening</div>
-          <div class="muted">6:00 PM – 8:30 PM</div>
+        <div class="table-wrap" *ngIf="filteredTimings.length > 0; else noTiming">
+          <table>
+            <thead>
+              <tr>
+                <th>Doctor</th>
+                <th>City</th>
+                <th>Day</th>
+                <th>Morning</th>
+                <th>Evening</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of filteredTimings">
+                <td>{{ t.docterName || '-' }}</td>
+                <td>{{ t.cityName || '-' }}</td>
+                <td>{{ t.day || '-' }}</td>
+                <td>{{ t.morningTime || '-' }}</td>
+                <td>{{ t.evningTime || '-' }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <ng-template #noTiming><p class="muted">No timing data.</p></ng-template>
       </div>
     </section>
 
     <section id="reviews" class="section">
       <div class="section-header">
         <h2>Reviews</h2>
-        <p>Reviews list placeholder.</p>
+        <p>Real-time reviews data.</p>
       </div>
       <div class="panel">
-        <div class="row">
-          <div class="pill">New</div>
-          <div class="muted">No pending reviews.</div>
+        <div class="search-row">
+          <input type="text" [(ngModel)]="reviewSearch" placeholder="Search review..." />
         </div>
+        <div class="table-wrap" *ngIf="filteredReviews.length > 0; else noReview">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Reward</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of filteredReviews">
+                <td>{{ r.review_id || '-' }}</td>
+                <td>{{ r.name || '-' }}</td>
+                <td>{{ r.rating || '-' }}</td>
+                <td>{{ r.reward || '-' }}</td>
+                <td>{{ r.status ? 'Active' : 'Inactive' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noReview><p class="muted">No reviews data.</p></ng-template>
       </div>
     </section>
 
     <section id="enquiry" class="section">
       <div class="section-header">
         <h2>Enquiry</h2>
-        <p>Enquiry list placeholder.</p>
+        <p>Real-time enquiry data.</p>
       </div>
       <div class="panel">
-        <div class="row">
-          <div class="pill">Today</div>
-          <div class="muted">No enquiries yet.</div>
+        <div class="search-row">
+          <input type="text" [(ngModel)]="enquirySearch" placeholder="Search enquiry..." />
         </div>
+        <div class="table-wrap" *ngIf="filteredEnquiries.length > 0; else noEnquiry">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Subject</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of filteredEnquiries">
+                <td>{{ e.enquiry_id || '-' }}</td>
+                <td>{{ e.name || '-' }}</td>
+                <td>{{ e.mobileNo || '-' }}</td>
+                <td>{{ e.subject || '-' }}</td>
+                <td>{{ e.status ? 'Active' : 'Inactive' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noEnquiry><p class="muted">No enquiry data.</p></ng-template>
       </div>
     </section>
   </div>

@@ -35,9 +35,10 @@
 
         <ng-template #adminMenu>
           <ul>
-            <li><a href="#doctor-timing" (click)="scrollToAdminSection('doctor-timing', $event)">Doctor Timing</a></li>
-            <li><a href="#reviews" (click)="scrollToAdminSection('reviews', $event)">Reviews</a></li>
-            <li><a href="#enquiry" (click)="scrollToAdminSection('enquiry', $event)">Enquiry</a></li>
+            <li><a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a></li>
+            <li><a routerLink="/admin/docter-timeing" routerLinkActive="active">Doctor Timing</a></li>
+            <li><a routerLink="/admin/docter-reviews" routerLinkActive="active">Reviews</a></li>
+            <li><a routerLink="/admin/enquiry" routerLinkActive="active">Enquiry</a></li>
             <li><a href="/admin/login" (click)="logout($event)">Logout</a></li>
           </ul>
         </ng-template>
